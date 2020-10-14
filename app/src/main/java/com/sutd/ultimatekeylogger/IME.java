@@ -39,7 +39,7 @@ public class IME extends InputMethodService implements KeyboardView.OnKeyboardAc
     @Override
     public void onRelease(int primaryCode) {
     }
-    //TODO: разобраться с записью кей-кодов
+
     @Override
     public void onKey(int primaryCode, int[] keyCodes) {
         InputConnection ic = getCurrentInputConnection();
@@ -139,7 +139,7 @@ public class IME extends InputMethodService implements KeyboardView.OnKeyboardAc
                 return new Keyboard(this, R.layout.keys_definition_ru);
         }
     }
-    //TODO: [ГОТОВО ]Разобраться с некорректным возвратом на язык после переключения на символы
+
     private void handleLanguageSwitch() {
         if (mCurrentLocale.equals("RUSSIAN")) {
             mCurrentLocale = "ENGLISH";
