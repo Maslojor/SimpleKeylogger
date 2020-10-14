@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Ultimate Keylogger</string>
-    <string name="ime">IME</string>
+    <string name="ime">Keylogging One</string>
     <string name="subtype_en_US">English (US)</string>
+    <string name="subtype_ru_RU">Russian (RU)</string>
 </resources>

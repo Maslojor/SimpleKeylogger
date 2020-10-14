@@ -32,9 +32,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        //StrictMode.setThreadPolicy(policy);
-
         LayoutInflater li = LayoutInflater.from(context);
         View promptsView = li.inflate(R.layout.prompt, null);
         AlertDialog.Builder mDialogBuilder = new AlertDialog.Builder(context);
@@ -78,5 +75,9 @@ public class MainActivity extends AppCompatActivity {
         etLog.setText("");
         readFile(etLog);
         //deleteFile("logfile");
+    }
+    public void onClearHandler(View view)
+    {
+        deleteFile("logfile");
     }
 }

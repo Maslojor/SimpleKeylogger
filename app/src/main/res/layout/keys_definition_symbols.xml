@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Keyboard xmlns:android="http://schemas.android.com/apk/res/android"
-    android:keyWidth="8%p"
-    android:horizontalGap="5px"
+    android:keyWidth="10%p"
     android:verticalGap="0px"
     android:keyHeight="50dp"
     android:layout_height="wrap_content"
     android:layout_width="match_parent" >
 
     <Row>
-        <Key android:codes="49" android:keyLabel="1" android:horizontalGap="6%" android:keyEdgeFlags="left" />
+        <Key android:codes="49" android:keyLabel="1" android:keyEdgeFlags="left" />
         <Key android:codes="50" android:keyLabel="2" />
         <Key android:codes="51" android:keyLabel="3" />
         <Key android:codes="52" android:keyLabel="4" />
@@ -20,7 +19,7 @@
         <Key android:codes="48" android:keyLabel="0" android:keyEdgeFlags="right" />
     </Row>
     <Row>
-        <Key android:codes="64" android:keyLabel="\@" android:horizontalGap="6%" android:keyEdgeFlags="left" />
+        <Key android:codes="64" android:keyLabel="\@" android:keyEdgeFlags="left" />
         <Key android:codes="35" android:keyLabel="#" />
         <Key android:codes="36" android:keyLabel="$" />
         <Key android:codes="37" android:keyLabel="%" />
@@ -32,8 +31,7 @@
         <Key android:codes="41" android:keyLabel=")" android:keyEdgeFlags="right" />
     </Row>
     <Row>
-        <Key android:codes="-1" android:keyIcon="@drawable/ic_keyboard_capslock_white_24dp"
-            android:keyWidth="15%p" android:horizontalGap="4%" android:keyEdgeFlags="left" />
+        <Key android:codes="-1" android:keyIcon="@drawable/ic_keyboard_capslock_white_24dp" android:keyWidth="15%p"  android:keyEdgeFlags="left" />
         <Key android:codes="33" android:keyLabel="!" />
         <Key android:codes="34" android:keyLabel="&#34;" />
         <Key android:codes="39" android:keyLabel="'" />
